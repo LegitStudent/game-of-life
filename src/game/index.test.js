@@ -8,5 +8,6 @@ test('counts the right number of neighbors', () => {
         }
     }
 
-    expect(sample.countNeighbors(1, 1)).toBe(8);
+    sample.grid[0][0] = false;
+    expect(sample.countNeighbors(1, 1)).toBe(7);
 });
