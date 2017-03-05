@@ -32,12 +32,12 @@ class Game {
 		Y+1	| N | N | N |
 
 	*/
-	countNeighbors(gridToCheck, cellX, cellY) {
+	countNeighbors(cellX, cellY) {
 		let numberOfAliveNeighbors = 0;
 
 		for (let row = cellY - 1; row <= cellY + 1; row++ ) {
 			for (let col = cellX - 1; col <= cellX + 1; col++) {
-				if (gridToCheck[row][col] && !(row === cellY && col === cellX)) {
+				if (this.grid[row][col] && !(row === cellY && col === cellX)) {
 					/* 
 						If the scell is alive (true) & it isn't the center cell,
 						increment the counter.
@@ -54,6 +54,12 @@ class Game {
 	/*
 		Evaluates the next state/generation of the current game instance.
 		This method will not mutate the current game grid.
+
+		According to Wikipedia, the rules of the game are:
+			1. Any live cell with fewer than 2 live neighbors dies.
+			2. Any live cell with two or three live neighbors lives on to the next generation.
+			3. Any live cell with three or more live neighbors dies.
+			4. Any dead cell with exactly three live neighbors becomes a live cell.
 	*/
 	evaluate() {
 		let previousGrid = this.grid;
@@ -61,6 +67,7 @@ class Game {
 
 		for (let row = 0; row < this.gridSize; row++) {
 			for (let col = 0; col < this.gridSize; col++) {
+				// Next cell state depends on the number of neighbors.
 				
 			}
 		}
