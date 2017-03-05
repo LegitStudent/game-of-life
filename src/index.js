@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Grid from './components/Grid';
-import Game from './game/game';
+import Game from './game';
 import './index.css';
 
 // Initialize Game
