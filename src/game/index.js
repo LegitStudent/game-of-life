@@ -32,12 +32,12 @@ class Game {
 		Y+1	| N | N | N |
 
 	*/
-	countNeighbors(cellX, cellY) {
+	countNeighbors(cellX, cellY, gridToCheck = this.grid) {
 		let numberOfAliveNeighbors = 0;
 
 		for (let row = cellY - 1; row <= cellY + 1; row++ ) {
 			for (let col = cellX - 1; col <= cellX + 1; col++) {
-				if (this.grid[row][col] && !(row === cellY && col === cellX)) {
+				if (gridToCheck[row][col] && !(row === cellY && col === cellX)) {
 					/* 
 						If the scell is alive (true) & it isn't the center cell,
 						increment the counter.
@@ -68,7 +68,25 @@ class Game {
 		for (let row = 0; row < this.gridSize; row++) {
 			for (let col = 0; col < this.gridSize; col++) {
 				// Next cell state depends on the number of neighbors.
-				
+				const cellState = previousGrid[row][col];
+				const liveNeighborCount = this.countNeighbors(col, row, previousGrid);
+
+				if (cellState) {
+					// Alive cell decisions
+					if (liveNeighborCount <= 2 || liveNeighborCount >= 3) {
+						newGrid[row][col] = false;
+					}
+					else {
+						newGrid[row][col] = true;
+					}
+				} else {
+					// Dead cell decisions
+					if (liveNeighborCount === 3) {
+						newGrid[row][col] = true;
+					} else {
+						newGrid[row][col] = false;
+					}
+				}
 			}
 		}
 
