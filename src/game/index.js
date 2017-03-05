@@ -29,13 +29,13 @@ class Game {
 		let numberOfAliveNeighbors = 0;
 
 		for (let row = cellRow - 1; row <= cellRow + 1; row++ ) {
-			if (row < 0 || row > gridToCheck.gridSize) {
+			if (row < 0 || row >= gridToCheck.gridSize) {
 				continue;
 			}
 
 			for (let col = cellCol - 1; col <= cellCol + 1; col++) {
 				// Make sure row and column are both positive and less than the gridSize
-				if (col < 0 || col > gridToCheck.gridSize) {
+				if (col < 0 || col >= gridToCheck.gridSize) {
 					continue;
 				}
 
@@ -72,24 +72,17 @@ class Game {
 				const cellState = previousGrid.getCell(row, col);
 				const liveNeighborCount = this.countNeighbors(row, col, previousGrid);
 
-				console.log('%s, %s', row, col);
 				if (cellState) {
-					// Alive cell changes
 					if (liveNeighborCount < 2 || liveNeighborCount > 3) {
 						newGrid.setCell(row, col, !cellState);
-						console.log('alive to dead');
 					} else {
 						newGrid.setCell(row, col, cellState);
-						console.log('alive to alive');
 					}
 				} else {
-					// Dead cell changes
 					if (liveNeighborCount === 3) {
 						newGrid.setCell(row, col, !cellState);
-						console.log('dead to alive');
 					} else {
 						newGrid.setCell(row, col, cellState);
-						console.log('dead to dead');
 					}
 				}
 			}
@@ -103,7 +96,7 @@ class Game {
 		with the game's .evalute() method.
 	*/
 	nextGeneration(newGrid = this.evalute()) {
-		this.grid = newState;
+		this.grid = newGrid;
 	}
 }
 
