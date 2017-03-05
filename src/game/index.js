@@ -16,22 +16,34 @@ class Game {
 		Y+1	| N | N | N |
 
 	*/
-	countNeighbors(cellX, cellY, gridToCheck = this.grid) {
+	
+	get grid() {
+		return this._grid;
+	}
+
+	set grid(newState) {
+		this._grid.state = newState;
+	}
+
+	countNeighbors(cellRow, cellCol, gridToCheck = this.grid) {
 		let numberOfAliveNeighbors = 0;
 
-		for (let row = cellY - 1; row <= cellY + 1; row++ ) {
-			for (let col = cellX - 1; col <= cellX + 1; col++) {
-				if (gridToCheck[row][col] && !(row === cellY && col === cellX)) {
+		for (let row = cellRow - 1; row <= cellRow + 1; row++ ) {
+			if (row < 0 || row > gridToCheck.gridSize) {
+				continue;
+			}
+
+			for (let col = cellCol - 1; col <= cellCol + 1; col++) {
+				// Make sure row and column are both positive and less than the gridSize
+				if (col < 0 || col > gridToCheck.gridSize) {
+					continue;
+				}
+
+				if (gridToCheck.getCell(row, col) && !(row === cellRow && col === cellCol)) {
 					/* 
 						If the cell is alive (true) & it isn't the center cell,
 						increment the counter.
-					*/
-
-					/* 
-						TODO: Write error handling for cell checking since this method will
-									throw an exception for cells located at the edges of the grid.
-					*/
-
+					*/	
 					numberOfAliveNeighbors++;
 				}
 			}
@@ -51,35 +63,38 @@ class Game {
 			4. Any dead cell with exactly three live neighbors becomes a live cell.
 	*/
 	evaluate() {
-		let previousGrid = this.grid;
-		let newGrid = this.initialize(this.gridSize);
+		const previousGrid = this.grid;
+		let newGrid = new Grid(previousGrid.gridSize);
 
-		for (let row = 0; row < this.gridSize; row++) {
-			for (let col = 0; col < this.gridSize; col++) {
+		for (let row = 0; row < previousGrid.gridSize; row++) {
+			for (let col = 0; col < previousGrid.gridSize; col++) {
 				// Next cell state depends on the number of neighbors.
-				const cellState = previousGrid[row][col];
-				const liveNeighborCount = this.countNeighbors(col, row, previousGrid);
+				const cellState = previousGrid.getCell(row, col);
+				const liveNeighborCount = this.countNeighbors(row, col, previousGrid);
 
+				console.log('%s, %s', row, col);
 				if (cellState) {
 					// Alive cell changes
-					if (liveNeighborCount <= 2 || liveNeighborCount >= 3) {
-						newGrid[row][col] = false;
-						continue;
+					if (liveNeighborCount < 2 || liveNeighborCount > 3) {
+						newGrid.setCell(row, col, !cellState);
+						console.log('alive to dead');
+					} else {
+						newGrid.setCell(row, col, cellState);
+						console.log('alive to alive');
 					}
 				} else {
 					// Dead cell changes
 					if (liveNeighborCount === 3) {
-						newGrid[row][col] = true;
-						continue;
+						newGrid.setCell(row, col, !cellState);
+						console.log('dead to alive');
+					} else {
+						newGrid.setCell(row, col, cellState);
+						console.log('dead to dead');
 					}
 				}
-
-				// No changes happened
-				newGrid[row][col] = cellState;
 			}
 		}
 
-		console.log(newGrid);
 		return newGrid;
 	}
 
