@@ -1,25 +1,9 @@
+import Grid from './Grid';
+
 class Game {
 	constructor(gridSize) {
-		this.gridSize = gridSize;
-		this.generationCount = 0;
-		this.grid = this.initialize(gridSize);
-	}
-
-	initialize(gridSize) {
-	  let gridArray = [];
-		
-    for (var row = 0; row < gridSize; row++) {
-			gridArray.push([]);
-      for (var col = 0; col < gridSize; col++) {
-				/* 
-					Since each cell only has two states, they are represented by boolean values.
-					A true value for alive cells, a false value for dead cells.
-				*/
-        gridArray[row].push(false);
-      }
-    }
-
-		return gridArray;
+		this._generationCount = 0;
+		this._grid = new Grid(gridSize);
 	}
 
 	/* 
@@ -41,6 +25,11 @@ class Game {
 					/* 
 						If the cell is alive (true) & it isn't the center cell,
 						increment the counter.
+					*/
+
+					/* 
+						TODO: Write error handling for cell checking since this method will
+									throw an exception for cells located at the edges of the grid.
 					*/
 
 					numberOfAliveNeighbors++;
@@ -98,7 +87,7 @@ class Game {
 		Mutates the current game grid with a new state. Intended to be used
 		with the game's .evalute() method.
 	*/
-	next(newGrid = this.evalute()) {
+	nextGeneration(newGrid = this.evalute()) {
 		this.grid = newState;
 	}
 }
