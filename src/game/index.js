@@ -26,9 +26,9 @@ class Game {
 		Counts the number of alive neighbors, or the number of surrounding true
 		values.
 
-				 X-1	X  X+1
+			   X-1  X  X+1
 		Y-1 | N | N | N |
-			Y	| N | C | N |
+		  Y	| N | C | N |
 		Y+1	| N | N | N |
 
 	*/
@@ -39,7 +39,7 @@ class Game {
 			for (let col = cellX - 1; col <= cellX + 1; col++) {
 				if (gridToCheck[row][col] && !(row === cellY && col === cellX)) {
 					/* 
-						If the scell is alive (true) & it isn't the center cell,
+						If the cell is alive (true) & it isn't the center cell,
 						increment the counter.
 					*/
 
@@ -72,24 +72,25 @@ class Game {
 				const liveNeighborCount = this.countNeighbors(col, row, previousGrid);
 
 				if (cellState) {
-					// Alive cell decisions
+					// Alive cell changes
 					if (liveNeighborCount <= 2 || liveNeighborCount >= 3) {
 						newGrid[row][col] = false;
-					}
-					else {
-						newGrid[row][col] = true;
+						continue;
 					}
 				} else {
-					// Dead cell decisions
+					// Dead cell changes
 					if (liveNeighborCount === 3) {
 						newGrid[row][col] = true;
-					} else {
-						newGrid[row][col] = false;
+						continue;
 					}
 				}
+
+				// No changes happened
+				newGrid[row][col] = cellState;
 			}
 		}
 
+		console.log(newGrid);
 		return newGrid;
 	}
 
