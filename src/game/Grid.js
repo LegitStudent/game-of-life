@@ -11,15 +11,14 @@
     * [Style] All interactions with the grid has to reference row before column.
 
   Required operations:
-    1. Get the value of a cell.
-    2. Get the location of a cell.
-    3.
+    1. Get/set the value of a cell.
+    2.
 */
 
 class Grid {
   constructor(gridSize) {
     this._gridSize = gridSize;
-    this._data = this.initialize(gridSize);
+    this._state = this.initialize(gridSize);
   }
 
   initialize(gridSize, initialValue = false) {
@@ -37,17 +36,27 @@ class Grid {
 		return gridArray;
 	}
 
-  // Getter and Setter methods for the grid.
-  getCell(row, col) {
-    return this._data[row][col];
+  // Getter and Setter methods for the grid cells.
+  getCell(row, col) {    
+    return this._state[row][col];
   }
 
   setCell(row, col, value) {
-    return this._data[row][col] = value;
+    this._state[row][col] = value;
   }
 
-  
+  // Grid state management
+  get state() {
+    return this._state;
+  }
 
+  set state(newGrid) {
+    this._state = newGrid;
+  }
+
+  get gridSize() {
+    return this._gridSize;
+  }
 }
 
 export default Grid;
